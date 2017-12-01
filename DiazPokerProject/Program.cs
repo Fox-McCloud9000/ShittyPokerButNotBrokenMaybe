@@ -9,7 +9,7 @@ namespace DiazPokerProject
     {
         static void Main(string[] args)
         {
-            int howManyCards = 2;
+            int howManyCards = 5;
             int balance = 10;
 
             ForegroundColor = ConsoleColor.Yellow;
@@ -43,28 +43,23 @@ namespace DiazPokerProject
                 Array.Sort(computerHand);
                 Array.Sort(playersHand);
                 DisplayHands(computerHand, playersHand);
-
-                //if (Flush(computerHand)) //DEBUG
-                //{
-                //    WriteLine("It's a flush!");
-                //}
                 
                 if (CompareHands(computerHand,playersHand))
                 {
                     balance++;
-                    WriteLine("You beat this really simple game by pure luck! Wow, good for you...");
+                    WriteLine("\nYou beat this really simple game by pure luck! Wow, good for you...(okay and maybe a tiny bit of skill)");
                     WriteLine($"You now have {balance:C}!");
                 }
                 else 
                 {
                     balance--;
-                    WriteLine("You lost. Better get used to it.");
+                    WriteLine("\nYou lost. Better get used to it.");
                     WriteLine("You have {0:C} left.", balance);
                 }
 
                 if (balance == 0)
                 {
-                    WriteLine("You lost all of your money. Time to reflect on your life choices.");
+                    WriteLine("\nYou lost all of your money. Time to reflect on your life choices.");
                     won = false;
                 }
             } while (balance != 0);
@@ -80,7 +75,7 @@ namespace DiazPokerProject
             int compCardCount = 0;
             int playCardCount = 0;
             
-            WriteLine("This is the computer's hand."); //This is to debug
+            WriteLine("\nThis is the computer's hand."); 
             for (int i = 0; i < passedInComputerHand.Length; i++)
             {
                 compCardCount++;
@@ -104,12 +99,12 @@ namespace DiazPokerProject
         {
             if (Flush(passedInComputerHand)) 
             {
-                WriteLine("It's a flush!");
-                return true;
+                WriteLine("\nComputer has a flush!\n");
+                return false;
             }
             else if(Flush(passedInPlayerHand))
             {
-                WriteLine("It's a flush!");
+                WriteLine("\nYou got a flush!\n");
                 return true;
             }
                           
@@ -134,7 +129,7 @@ namespace DiazPokerProject
 
         private static void PlayerDrawsOne(int pHowManyCards, CardSet pMyDeck, SuperCard[] pPlayerHand)
         {
-            WriteLine("Which card would you like to replace?");
+            WriteLine("\nWhich card would you like to replace?");
             WriteLine($"Enter 1-{pHowManyCards}, or 0 if no cards: ");
             int a;
             int.TryParse(ReadLine(), out a);
@@ -147,25 +142,29 @@ namespace DiazPokerProject
 
         private static void ComputerDrawsOne(SuperCard[] computerHand, CardSet myDeck)
         {
-            WriteLine("This is the computers lowest hand.");
             SuperCard lowestCard = computerHand[0];
 
-            int a = 0;
-
-            for (int i = 1; i < computerHand.Length; i++)
+            if (Flush(computerHand))
             {
-                if ((int)(computerHand[i].CardRank) < (int)(lowestCard.CardRank))
-                {
-                    lowestCard = computerHand[i];
-                    a = i;
-                }
+
             }
-
-            WriteLine($"{computerHand[a].CardRank} {computerHand[a].CardSuit}");
-
-            if ((int)lowestCard.CardRank < 7)
+            else
             {
-                computerHand[a] = myDeck.GetOneCard();
+                int a = 0;
+
+                for (int i = 1; i < computerHand.Length; i++)
+                {
+                    if ((int)(computerHand[i].CardRank) < (int)(lowestCard.CardRank))
+                    {
+                        lowestCard = computerHand[i];
+                        a = i;
+                    }
+                }
+
+                if ((int)lowestCard.CardRank < 7)
+                {
+                    computerHand[a] = myDeck.GetOneCard();
+                }
             }
         }
 
